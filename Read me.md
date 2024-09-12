@@ -1,6 +1,6 @@
  Git repository
 
-[Daniel N. git](https://github.com/send4tress/semminar)
+[Daniel N. git] (https://github.com/send4tress/semminar)
 
 Project proposal
 
