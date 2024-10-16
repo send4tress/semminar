@@ -49,7 +49,8 @@ cat /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/unmapped_assembl
 #task 5
 did not run blast to not use a lot of resources
 
-#task 6 had some trouble submiting , done in console and worked
+#task 6
+#had some trouble submiting , done in console and worked
 sbatch 	/home/biol726308/BIOL7263_Genomics/scripts/unmapped/unmapped_orf.sbatch
 
 #to blast against the reference sequence 
