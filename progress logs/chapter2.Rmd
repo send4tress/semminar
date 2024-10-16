@@ -138,7 +138,10 @@ grep -v -c  "^#" /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/map
 sbatch /home/biol726308/BIOL7263_Genomics/scripts/bcf/ecoli_filt.sbatch
 #visualize on IGV
 
+
 #Task 15
+
+
 #Locate missing genes compared to reference (bedtools)
 sbatch /home/biol726308/BIOL7263_Genomics/scripts/bcf/ecoli_cover.sbatch
 #we got a file with this info
@@ -146,7 +149,3 @@ sbatch /home/biol726308/BIOL7263_Genomics/scripts/bcf/ecoli_cover.sbatch
 #sorting by the 13th (last) column
 sort -t $'\t' -g -k 13 /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/mapping_to_reference/gene_coverage.txt | less -S
 sort -t $'\t' -g -k 13 /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/mapping_to_reference/gene_coverage.txt | cut -f1-8,10-13 | less -S
-
-
-
-
