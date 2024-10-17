@@ -120,9 +120,8 @@ sbatch /home/biol726308/BIOL7263_Genomics/scripts/quality_map/ecoli_bamqc.sbatch
 #loaded bam alignment file
 #ran IGV tools and created a .tdf file
 
-
 # Task 12
-
+#identified regions without any read mapping
 
 #SNP identification
 bcftools mpileup
@@ -136,8 +135,7 @@ grep -v -c  "^#" /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/map
 sbatch /home/biol726308/BIOL7263_Genomics/scripts/bcf/ecoli_filt.sbatch
 #visualize on IGV
 
-# Task 12
-#identified regions without any read mapping
+
 
 # Task 13
 #identified SNPs, indels 
