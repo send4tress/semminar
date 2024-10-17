@@ -1,8 +1,4 @@
----
-title: "Chapter 1"
-output: html_document
-date: "2024-10-16"
----
+
 #CHAPTER 1
 #we activate environment
 mamba activate /home/mbtoomey/.conda/envs/BIOL7263_Genomics

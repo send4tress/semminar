@@ -1,8 +1,4 @@
----
-title: "chapter2"
-output: html_document
-date: "2024-10-16"
----
+
 #Quality of Illumina data
 cd /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli
 
