@@ -3,16 +3,22 @@
 
 # Task1
 cd /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/
+
 ls -lath
+
 mkdir unmapped_assembly
+
 cd unmapped_assembly
+
 #pickiung up the unmaped reads, first view sam file 
 samtools view /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/mapping_to_reference/ecoli_mapped_namesort_fixmate_sort_markdup.bam | head -n 5
+
 #using flags to collect unmaped reads
 samtools view -b -f 12 /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/mapping_to_reference/ecoli_mapped_namesort_fixmate_sort_markdup.bam -o /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/unmapped_assembly/unmapped.bam
 
 #to view first 5 files 
 samtools view unmapped.bam | head -n 5
+
 #SRR857279.48    77      *       0       0       *       *       0       0       ATCCGTCCCTCCGCATCGTATACGAGGCGTTTCCAGGGACCGGTGATAATATGTTCAGGCGCATCATCAAGGATGCGCTTTTTCGAACCATTCAGTTCTGCCAGATAATGAATCGCAGCC        ??????B@DDDDDDEBDEFFCFH?>EHHHEHHHHHFHEHHHHH*>EGHHHFFHFGHHHHHHHHHHHHHHHHFDFFHHHHHFFHHDFFFEEEEEEEEEEEEEECEEEEEEEECEEEEEEEE        MQ:i:0  AS:i:0  XS:i:0 ms:i:4486
 
 #converting from bam to fastq (bedtools bamtofastq)
