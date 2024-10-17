@@ -1,3 +1,4 @@
+# Chapter 2
 
 #Quality of Illumina data
 cd /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli
@@ -21,7 +22,7 @@ sbatch /home/biol726308/BIOL7263_Genomics/scripts/fastqc/ecoli_fastqc.sbatch
 squeue -u biol726308
 
 
-#TASK 2
+# TASK 2
 
 
 mkdir -p /home/biol726308/BIOL7263_Genomics/scripts/trim_galore
@@ -33,7 +34,7 @@ zcat trimmed_reads_val_1.fq.gz | wc -l
 zcat trimmed_reads_val_2.fq.gz | wc -l
 
 
-#TASK 3
+# TASK 3
 
 seqtk sample -s 1234 trimmed_reads_val_1.fq.gz 0.1 > trimmed_reads_val_1_subsample_three.fq
 
@@ -55,9 +56,10 @@ pigz *.fq # to compress files
 #digital normalization
 
 
-#TASK 4
+# TASK 4
+done
 
-#TASK 5 
+# TASK 5
 
 #indexing with BWA
 mkdir /home/biol726308/BIOL7263_Genomics/scripts/BWA/
@@ -65,22 +67,22 @@ mkdir /home/biol726308/BIOL7263_Genomics/scripts/BWA/
 sbatch /home/biol726308/BIOL7263_Genomics/scripts/BWA/ecoli_index.sbatch
 
 
-#Task 6 read mapping
+# Task 6 read mapping
 
 #mapping: generates SAM files
 sbatch /home/biol726308/BIOL7263_Genomics/scripts/BWA/ecoli_bwa_mem.sbatch
 
 
-#Task 7
+# Task 7
 
-# SAM to BAM 
+#SAM to BAM 
 sbatch /home/biol726308/BIOL7263_Genomics/scripts/BWA/ecoli_samtools_view.sbatch
 
 #sorting: by chromosomal coordinates
 sbatch /home/biol726308/BIOL7263_Genomics/scripts/BWA/ecoli_map_sort.sbatch
 
 
-#task 8 
+# task 8 
 
 #Removal of PCR duplicates (samtools fixmate and samtools markdup)
 sbatch /home/biol726308/BIOL7263_Genomics/scripts/BWA/ecoli_markdup.sbatch
@@ -89,7 +91,7 @@ sbatch /home/biol726308/BIOL7263_Genomics/scripts/BWA/ecoli_markdup.sbatch
 sbatch /home/biol726308/BIOL7263_Genomics/scripts/BWA/ecoli_samindex.sbatch 
 
 
-#Task9
+# Task9
 
 
 #mapping stats
@@ -104,14 +106,14 @@ rm /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/mapping_to_refere
 rm /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/mapping_to_reference/ecoli_mapped_sorted.bam
 
 
-#task 10
+# task 10
 
 
 #Create a quality map
 sbatch /home/biol726308/BIOL7263_Genomics/scripts/quality_map/ecoli_bamqc.sbatch 
 
 
-#Task 11 IGV
+# Task 11 IGV
 
 #imported ecoli reference genome (.fna)
 #imported e coli annotation (.gff)
@@ -119,7 +121,7 @@ sbatch /home/biol726308/BIOL7263_Genomics/scripts/quality_map/ecoli_bamqc.sbatch
 #ran IGV tools and created a .tdf file
 
 
-#Task 12
+# Task 12
 
 
 #SNP identification
@@ -134,8 +136,33 @@ grep -v -c  "^#" /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/map
 sbatch /home/biol726308/BIOL7263_Genomics/scripts/bcf/ecoli_filt.sbatch
 #visualize on IGV
 
+# Task 12
+#identified regions without any read mapping
 
-#Task 15
+# Task 13
+#identified SNPs, indels 
+
+NC_000913.3:1,189,605-1,217,811
+NC_000913.3:1,291,997-1,295,522
+NC_000913.3:4,296,249-4,296,510
+
+# Task 14
+
+#SNP identification
+bcftools mpileup
+sbatch /home/biol726308/BIOL7263_Genomics/scripts/bcf/ecoli_vcf.sbatch 
+#vcf file was created
+#call variant sites
+sbatch /home/biol726308/BIOL7263_Genomics/scripts/bcf/ecoli_call.sbatch
+grep -v -c  "^#" /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/mapping_to_reference/var.called.vcf
+#I got 179 variant sites
+
+
+#to retain alleles with >90% frequency (vcftools)
+sbatch /home/biol726308/BIOL7263_Genomics/scripts/bcf/ecoli_filt.sbatch
+#visualized on IGV
+
+# Task 15
 
 
 #Locate missing genes compared to reference (bedtools)

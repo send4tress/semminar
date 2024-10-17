@@ -1,5 +1,6 @@
 
-#Chapter3
+# Chapter3
+
 cd /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/
 ls -lath
 mkdir unmapped_assembly
@@ -22,7 +23,7 @@ grep -c "^@SRR" unmapped_r1.fastq unmapped_r2.fastq
 #unmapped_r2.fastq:56710
 tail -n 4 unmapped_r1.fastq unmapped_r2.fastq
 
-# check unmapped QC (fastqc) (did not run , ran on terminal instead)
+#check unmapped QC (fastqc) (did not run , ran on terminal instead)
 
 mkdir /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/unmapped_assembly/fastqc
 cd /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/unmapped_assembly/fastqc
@@ -31,16 +32,16 @@ sbatch /home/biol726308/BIOL7263_Genomics/scripts/unmapped/unmapped_fastqc.sbatc
 #de novo genome assembly (SPades)
 sbatch /home/biol726308/BIOL7263_Genomics/scripts/unmapped/unmapped_spades.sbatch
 
-#task 4 stadistics of assembly (quast)
+# task 4 stadistics of assembly (quast)
 sbatch /home/biol726308/BIOL7263_Genomics/scripts/unmapped/unmapped_quast.sbatch
 
 cat /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/unmapped_assembly/spades_assembly/quast/report.txt
-# contigs (>= 0 bp)         17
+#contigs (>= 0 bp)         17
 
-#task 5
+# task 5
 did not run blast to not use a lot of resources
 
-#task 6
+# task 6
 #had some trouble submiting , done in console and worked
 sbatch 	/home/biol726308/BIOL7263_Genomics/scripts/unmapped/unmapped_orf.sbatch
 
@@ -50,4 +51,5 @@ sbatch 	/home/biol726308/BIOL7263_Genomics/scripts/unmapped/unmapped_blastn.sbat
 #outcome looks like this
 #NODE_1_length_46850_cov_69.441152	NC_000913.3	100.000	28	0	0	1	28	392940	392967	2.72e-05	52.8
 
-#task 7
+# task 7
+pending , supercomputer under maintenance (maybe)
