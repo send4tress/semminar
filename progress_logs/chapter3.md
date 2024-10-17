@@ -1,6 +1,7 @@
 
 # Chapter3
 
+# Task1
 cd /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/
 ls -lath
 mkdir unmapped_assembly
@@ -17,22 +18,24 @@ samtools view unmapped.bam | head -n 5
 #converting from bam to fastq (bedtools bamtofastq)
 sbatch /home/biol726308/BIOL7263_Genomics/scripts/unmapped/bam_to_fasta.sbatch
 
+# Task2
 #checking on the output
 grep -c "^@SRR" unmapped_r1.fastq unmapped_r2.fastq 
 #unmapped_r1.fastq:56710
 #unmapped_r2.fastq:56710
 tail -n 4 unmapped_r1.fastq unmapped_r2.fastq
 
-#check unmapped QC (fastqc) (did not run , ran on terminal instead)
+#check unmapped QC (fastqc) (ran on terminal)
 
 mkdir /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/unmapped_assembly/fastqc
 cd /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/unmapped_assembly/fastqc
 sbatch /home/biol726308/BIOL7263_Genomics/scripts/unmapped/unmapped_fastqc.sbatch
 
+# Task 3
 #de novo genome assembly (SPades)
 sbatch /home/biol726308/BIOL7263_Genomics/scripts/unmapped/unmapped_spades.sbatch
 
-# task 4 stadistics of assembly (quast)
+# Task 4 stadistics of assembly (quast)
 sbatch /home/biol726308/BIOL7263_Genomics/scripts/unmapped/unmapped_quast.sbatch
 
 cat /scratch/biol726308/BIOL7263_Genomics/sequencing_data/ecoli/unmapped_assembly/spades_assembly/quast/report.txt
