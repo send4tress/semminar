@@ -1,11 +1,11 @@
 #!/bin/bash
 #
 #SBATCH --partition=normal
-#SBATCH --ntasks=4
+#SBATCH --ntasks=1
 #SBATCH --mem 16G
-#SBATCH --output=ecoli_vcf_%J_stdout.txt
-#SBATCH --error=ecoli_vcf_%J_stderr.txt
-#SBATCH --job-name=ecoli_vcf
+#SBATCH --output=ecoli_call_%J_stdout.txt
+#SBATCH --error=ecoli_call_%J_stderr.txt
+#SBATCH --job-name=ecoli_call
 # 
 
-bash /home/biol726308/BIOL7263_Genomics/scripts/bcf/ecoli_vcf.sh
+bash /home/biol726308/BIOL7263_Genomics/scripts/bcf/ecoli_call.sh
