@@ -10,4 +10,4 @@ Chapter 1 notes [Chapter 1](https://github.com/send4tress/semminar/blob/main/pro
 
 Chapter 2 notes [Chapter 2](https://github.com/send4tress/semminar/blob/main/progress_logs/chapter2.md)
 
-Chapter 2 notes [Chapter 3](https://github.com/send4tress/semminar/blob/main/progress_logs/chapter3.md)
+Chapter 3 notes [Chapter 3](https://github.com/send4tress/semminar/blob/main/progress_logs/chapter3.md)
