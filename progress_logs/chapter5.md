@@ -183,6 +183,6 @@ Results
 The pac bio reads show many more gaps than the Illumina reads, PacBio also displays a lot of insertions (in purple)
 The illumina results apparently have a better quality of data however in areas with low coverage or missing sequences the Pacbio data displays a better coverage of the whole sequence
 
-##Task 8 
+## Task 8 
 
 no beer for me, many deadlines approach 
