@@ -44,7 +44,7 @@ cat /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/assembly/illumina_onl
 
 my results:
 
-[Assembly                    contigs
+```Assembly                    contigs
 # contigs (>= 0 bp)         527
 # contigs (>= 1000 bp)      120
 # contigs (>= 5000 bp)      102
@@ -64,7 +64,8 @@ GC (%)                      59.00
 N50                         93187
 N75                         64551
 L50                         22
-L75                         43]
+L75                         43
+```
 ## Task 5
 
 assembly of long reads
@@ -76,7 +77,7 @@ Running quast.py
 `quast.py --output-dir /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/assembly/hybrid/quast /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/assembly/hybrid/contigs.fasta
 
 cat /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/assembly/illumina_only/quast/report.txt
-[
+```
 Assembly                    contigs
 # contigs (>= 0 bp)         527
 # contigs (>= 1000 bp)      120
@@ -99,10 +100,10 @@ N75                         64551
 L50                         22
 L75                         43
 # N's per 100 kbp           0.00
-]
+```
 cat /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/assembly/hybrid/quast/report.txt
 
-[
+```
 Assembly                    contigs
 # contigs (>= 0 bp)         300
 # contigs (>= 1000 bp)      32
@@ -125,7 +126,7 @@ N75                         355188
 L50                         4
 L75                         8
 # N's per 100 kbp           0.00
-]
+```
 
 ## Task 6 Align reads back to reference
 
@@ -140,7 +141,7 @@ Now for  mapping we will generate a sam file, convert it to bam, sort it by geno
 pseudomonas_mapping.sbatch
 
 results:
-[
+```
 35309290 + 0 in total (QC-passed reads + QC-failed reads)
 0 + 0 secondary
 27786 + 0 supplementary
@@ -154,14 +155,14 @@ results:
 335388 + 0 singletons (0.95% : N/A)
 150192 + 0 with mate mapped to a different chr
 130325 + 0 with mate mapped to a different chr (mapQ>=5)
-]
+```
 
 Now mapping using minimap2
 
 pseudomonas_mapping_hybrid.sbatch
 
 Results
-[
+```
 129847 + 0 in total (QC-passed reads + QC-failed reads)
 2764 + 0 secondary
 51985 + 0 supplementary
@@ -175,7 +176,7 @@ Results
 0 + 0 singletons (N/A : N/A)
 0 + 0 with mate mapped to a different chr
 0 + 0 with mate mapped to a different chr (mapQ>=5)
-]
+```
 
 ## Task 7 IGV Illumina vs PacBio
 
