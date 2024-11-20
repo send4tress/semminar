@@ -1,0 +1,9 @@
+[bwa_index] Pack FASTA... 0.11 sec
+[bwa_index] Construct BWT for the packed sequence...
+[bwa_index] 2.71 seconds elapse.
+[bwa_index] Update BWT... 0.04 sec
+[bwa_index] Pack forward-only FASTA... 0.03 sec
+[bwa_index] Construct SA from BWT and Occ... 0.93 sec
+[main] Version: 0.7.18-r1243-dirty
+[main] CMD: bwa index -p /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/mapping_to_assembly/hybrid_assembly /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/assembly/hybrid/contigs.fasta
+[main] Real time: 5.025 sec; CPU: 3.822 sec

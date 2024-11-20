@@ -1,0 +1,12 @@
+[M::mm_idx_gen::0.865*0.19] collected minimizers
+[M::mm_idx_gen::0.901*0.35] sorted minimizers
+[M::main::0.901*0.35] loaded/built the index for 300 target sequence(s)
+[M::mm_mapopt_update::0.916*0.36] mid_occ = 10
+[M::mm_idx_stat] kmer size: 19; skip: 10; is_hpc: 1; #seq: 300
+[M::mm_idx_stat::0.929*0.37] distinct minimizers: 887059 (98.17% are singletons); average occurrences: 1.029; average spacing: 7.367; total length: 6725842
+[M::worker_pipeline::44.807*5.30] mapped 41236 sequences
+[M::worker_pipeline::76.037*5.49] mapped 33862 sequences
+[M::main] Version: 2.28-r1209
+[M::main] CMD: minimap2 -x map-pb -t 6 -a -o /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/mapping_to_assembly/pseud_pacbio.sam /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/assembly/hybrid/contigs.fasta /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/SRR1042836_subreads.fastq.gz
+[M::main] Real time: 76.057 sec; CPU: 417.228 sec; Peak RSS: 4.000 GB
+[bam_sort_core] merging from 2 files and 1 in-memory blocks...
