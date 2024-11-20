@@ -43,8 +43,8 @@ cd /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/
 cat /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/assembly/illumina_only/quast/report.txt
 
 my results:
-[
-Assembly                    contigs
+
+[Assembly                    contigs
 # contigs (>= 0 bp)         527
 # contigs (>= 1000 bp)      120
 # contigs (>= 5000 bp)      102
@@ -65,7 +65,6 @@ N50                         93187
 N75                         64551
 L50                         22
 L75                         43]
-
 ## Task 5
 
 assembly of long reads
