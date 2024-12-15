@@ -149,16 +149,16 @@ Now we need to transform the file into a database using diamond
 Now I ran diamond as blastx analysis 
 
 ### Creating Batch files for diamond analysis
-I created the batch files for all my samples using:
+I created the batch files for all my samples using the following logic
 
 `#!/bin/bash
 
-`# Define directories
+- Define directories
 `INPUT_DIR="/home/biol726308/BIOL7263_Genomics/project/all_fasta"
 `OUTPUT_DIR="/home/biol726308/BIOL7263_Genomics/project/blast/results_protein"
 `DATABASE="virus_database.dmnd"
 
-`# List of your sample files (you can also use find or ls to get the files)
+- List sample files 
 `samples=(
 ` "MP117.fa" "MP115.fa" "MP95.fa" "MP108.fa" "MP98.fa" 
 `  "MP336.fa" "MP279.fa" "MP266.fa" "MP261.fa" "MP157.fa"
@@ -166,15 +166,15 @@ I created the batch files for all my samples using:
 `  "MP128.fa" "MP119.fa"
 `)
 
-`# Loop through each sample and create the corresponding .sh and .sbatch files
+- Loop through each sample and create the corresponding .sh and .sbatch files
 `for sample in "${samples[@]}"; do
-`  # Get the base name (without the .fa extension)
+- Get the base name (without the .fa extension)
 `  base_name=$(basename ${sample} .fa)
   
-`  # Create .sh file (DIAMOND command)
+- Create .sh file (DIAMOND command)
 `  cat > ${base_name}.sh <<EOL
 
-`# DIAMOND blastx command for sample ${base_name}
+- DIAMOND blastx command for sample ${base_name}
 `diamond blastx \
 `  --threads 8 \
 `  --outfmt 6 qseqid sseqid length pident evalue stitle \
@@ -184,7 +184,7 @@ I created the batch files for all my samples using:
 `  -o ${OUTPUT_DIR}/${base_name}.tsv
 `EOL
 
-`  # Create .sbatch file (to submit the job to SLURM)
+- Create .sbatch file (to submit the job to SLURM)
 `  cat > ${base_name}.sbatch <<EOL
 `#!/bin/bash
 `#SBATCH --partition=normal
@@ -195,7 +195,7 @@ I created the batch files for all my samples using:
 `#SBATCH --error=${base_name}_%j_stderr.txt
 `#SBATCH --job-name=${base_name}
 
-`# Run the DIAMOND command for sample ${base_name}
+- Run the DIAMOND command for sample ${base_name}
 `bash ${base_name}.sh
 `EOL
 `done
@@ -207,7 +207,7 @@ I created the batch files for all my samples using:
 
 ### Combining diamond results 
 
-To work with only one file the following code was used to combine all the .tsv result files into one
+-- To work with only one file the following code was used to combine all the .tsv result files into one
 
 `for file in *.tsv; do
 `    if [[ "$file" != "combined_diamond_results.tsv" ]]; then
@@ -220,13 +220,13 @@ To work with only one file the following code was used to combine all the .tsv r
 ###filtering by lenght >100 , pident > 35% and removing sequences that have the word phage
 `awk -F'\t' '($4 >= 100 && $5 >= 35 && tolower($7) !~ /phage/)' combined_diamond_results.tsv > filtered_combined_diamond_results.tsv
 
-resulted in 45392 matches
+- resulted in 45392 matches
 
 
 `echo -e "sample_name\tqseqid\tsseqid\tlength\tpident\tevalue\tstitle" > final_filtered_combined_diamond_results.tsv
 `cat filtered_combined_diamond_results.tsv >> final_filtered_combined_diamond_results.tsv
 
-
+- Finally formated the .tsv file oppening it in Excel the file to have a good looking interface color coded and with conditional formating
 
 
 
@@ -238,33 +238,35 @@ Downloading virus nucleotide database
 
 `blastn -db /scratch/biol726308/project/virus_database -query /home/biol726308/BIOL7263_Genomics/project/all_fasta/MP108.fa -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads 20 -num_alignments 1 > /home/biol726308/BIOL7263_Genomics/project/blastn/results/MP108_blast.tsv
 
-Ran blastn for 108 
+- Ran blastn for sample 108 (test)
 `sbatch 108_blast.sbatch
 
-ran blast for the 17 isolates
+- ran blast for the 17 isolates
 
-combined the tsv files into 1 
+- combined the tsv files into 1 
 
-filtered 
+- filtered using the following commands 
 
-`# Input file (your BLASTn results)
+- Input file (BLASTn results)
 `input_file="blastn_results_with_headers.tsv"
 `output_file="filtered_blast_results.tsv"
 
-`# Apply filters: E-value ≤ 1e-5, alignment length ≥ 200
+- Apply filters: E-value ≤ 1e-5, alignment length ≥ 200
 `awk -F'\t' '$8 <= 1e-5 && $12 >= 200' $input_file > $output_file
 
-After the filtering the file went from 3472 to 1505 matches
+- After the filtering the file went from 3472 to 1505 matches
 
 ### organizing the data 
 
 
-`# Add the description row with proper tab-separated values
+- Added the description row with proper tab-separated values
 `echo -e "Isolate name\tQuery sequence ID\tSubject sequence ID\tSubject title\tSubject scientific name\tBit score\tQuery coverage\tE-value\tPercent identity\tSubject sequence length\tSubject accession\tAlignment length\tQuery sequence length\tQuery start position\tQuery end position\tSubject start position\tSubject end position\tStrand of alignment\tGap openings\tSubject taxonomy ID\tMismatched bases" > blastn_results_with_headers.tsv
 
-`# Append the original BLASTn results
+- Append the original BLASTn results
 `cat your_blastn_results.tsv >> blastn_results_with_headers.tsv
 
--filtered out the word "phage" since its not relevant for our results
+- filtered out the word "phage" since its not relevant for our results
 
-file went from  1505 to 1071
+- file went from  1505 to 1071
+
+- formated in excel the file to have a good looking interface color coded and with conditional formating
