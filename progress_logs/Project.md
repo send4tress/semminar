@@ -277,6 +277,6 @@ done > combined_diamond_results.tsv
 
 - formated in excel the file to have a good looking interface color coded and with conditional formating
 
-blast [Results Blastn](https://github.com/send4tress/semminar/blob/main/results/2024 all_mp_filtered_blast_results_formated.xlsx)
-blast [Results Diamond (blastx)](https://github.com/send4tress/semminar/blob/main/results/2024 all_mp_filtered_diamond_results_formated.xlsx)
+blast [Results Blastn](https://github.com/send4tress/semminar/blob/main/results/2024_all_mp_filtered_blast_results_formated.xlsx)
+blast [Results Diamond (blastx)](https://github.com/send4tress/semminar/blob/main/results/2024_all_mp_filtered_diamond_results_formated.xlsx)
 Chapter 5 notes [Chapter 5](https://github.com/send4tress/semminar/blob/main/progress_logs/chapter5.md)
