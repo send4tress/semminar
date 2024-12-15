@@ -1,12 +1,12 @@
 # Daniel Naranjo Project Script
 
-## Activating the environment / used commands
+# Activating the environment / used commands
 `cd /home/biol726308/BIOL7263_Genomics/project/blast
 `mamba activate /home/mbtoomey/.conda/envs/BIOL7263_Genomics
 `cd /scratch/biol726308/project
 `squeue -u biol726308
 
-## Setting up our files 
+# Setting up our files 
 
 ### Downloaded Reference Genome of the fungus (macrophomina phaseolina)
 
@@ -25,7 +25,7 @@ Reference genome found in: https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_0208
 `ln -s AR009-B_S17_R2_001.fastq.gz read_2.fastq.gz
 
 ### observing my gziped data
-zcat read_2.fastq.gz | head
+`zcat read_2.fastq.gz | head
 @LH00260:14:22CKNNLT3:3:1101:4181:1032 2:N:0:GATCAGATCT+AGATCTCGGT
 NCAACAGCAACAGCAACAGCAACATTTGGCGAAGCAAACATTGCAGCAAGCTCAGCTGCTCTTCCCTTACATGCAGGCTCAATTTCCCCATTCAACTAGCACTGCCACTGCTTCGCCTTCACATTCAAGAGATCGGAAGAGCGTCGTGTAG
 
@@ -33,35 +33,40 @@ NCAACAGCAACAGCAACAGCAACATTTGGCGAAGCAAACATTGCAGCAAGCTCAGCTGCTCTTCCCTTACATGCAGGCTC
 ### counting reads with zcat
 
 `zcat read_1.fastq.gz | grep @LH | wc -l
+
 11357466
+
 `zcat read_2.fastq.gz | grep @LH | wc -l
+
 11357466
 
 
 ##  Quality check with fastqc
 `mkdir -p /scratch/biol726308/project/fastqc_output
-
 `fastqc /scratch/biol726308/project/raw_data/read_1.fastq.gz -o /scratch/biol726308/project/fastqc_output/
 `fastqc /scratch/biol726308/project/raw_data/read_2.fastq.gz -o /scratch/biol726308/project/fastqc_output/
 
 
 
 ## Trimmed the fasqc files using trim galore
-
+Trimeed the reads to a lenght of 100 to remove areas of low quality
 `trim_galore --paired --fastqc --gzip --cores 4 --length 100 /scratch/biol726308/project/raw_data/read_1.fastq.gz //scratch/biol726308/project/raw_data/read_2.fastq.gz --basename trimmed_reads -o /scratch/biol726308/project/trim
 
-
-cd /scratch/biol726308/project
 
 ### Counting lines after trimming 
 
 `zcat trimmed_reads_val_1.fq.gz | wc -l
-42369340
+
+-42369340
+
 `zcat trimmed_reads_val_2.fq.gz | wc -l
-42369340
+
+-42369340
+
 
 
 ## Mapping to a reference genome (activating HISAT)
+To activate the library this was used:
 `ml HISAT2/2.2.1-gompi-2022a
 
 
@@ -73,46 +78,48 @@ cd /scratch/biol726308/project
 ## Extracting and sorting data of interest from the mapped file 
 
 ### Extract unaligned_reads from sam file
-samtools view -f 12 -h aligned_reads.sam > unaligned_reads.sam
+`samtools view -f 12 -h aligned_reads.sam > unaligned_reads.sam
 
 ### Converting sam to bam (binary) and sorting by name
 
-samtools view -Sb /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads.sam > /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads.bam
-samtools sort -n /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads.bam -o /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_by_name.bam
+`samtools view -Sb /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads.sam > /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads.bam
+`samtools sort -n /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads.bam -o /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_by_name.bam
 
 ### Correct mate information in paired-end reads using samtools fixmate 
 
-samtools fixmate -m /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_by_name.bam /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_fixed.bam
+`samtools fixmate -m /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_by_name.bam /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_fixed.bam
 
 ### Sorting again 
 
-samtools sort /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_fixed.bam -o /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_fixed.bam
+`samtools sort /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_fixed.bam -o /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_fixed.bam
 
 ### Marking duplicates and removed them
 
-samtools markdup -r /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_fixed.bam /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam
+`samtools markdup -r /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_fixed.bam /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam
 
 ### Making an index of the file 
 
-samtools index /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam
+`samtools index /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam
 
 ### Retrieving flagstats
 
-samtools flagstat /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam
+`samtools flagstat /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam
 
 
 ### Converting to fastq 
 
 `bedtools bamtofastq -i /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam \
-    `-fq unmapped_r1.fastq \
-   ` -fq2 unmapped_r2.fastq
+ `-fq unmapped_r1.fastq \
+ `-fq2 unmapped_r2.fastq
 
-`fastqc
+### Quality check of the new file
+
 `fastqc /scratch/biol726308/project/raw_data/mphaseolina/unmapped_r1.fastq \
         /scratch/biol726308/project/raw_data/mphaseolina/unmapped_r2.fastq \
         -o /scratch/biol726308/project/raw_data/mphaseolina/fastqc_output
-## RNA-seq De-novo assembly
+# RNA-seq De-novo assembly
 
+SPades program was used using the parameter -rna (paremeter -careful may also be used in the future)
 
 `spades.py --rna -1 /scratch/biol726308/project/raw_data/mphaseolina/unmapped_r1.fastq \
           -2 /scratch/biol726308/project/raw_data/mphaseolina/unmapped_r2.fastq \
@@ -120,16 +127,16 @@ samtools flagstat /scratch/biol726308/project/raw_data/mphaseolina/unaligned_rea
 
 ### Statistics on the assembly
 
-`quast.py -o /scratch/biol726308/project/quast_output/ \
-`>          -t 8 \
-`>          /scratch/biol726308/project/assembly_output/transcripts.fasta
-`/home/mbtoomey/.conda/envs/BIOL7263_Genomics/bin/quast.py -o /scratch/biol726308/project/quast_output/ -t 8 /scratch/biol726308/project/assembly_output/transcripts.fasta
+quast.py -o /scratch/biol726308/project/quast_output/ \
+>          -t 8 \
+>          /scratch/biol726308/project/assembly_output/transcripts.fasta
+/home/mbtoomey/.conda/envs/BIOL7263_Genomics/bin/quast.py -o /scratch/biol726308/project/quast_output/ -t 8 /scratch/biol726308/project/assembly_output/transcripts.fasta
 
 
 ### Retrieving all the generated fasta files automatically
 `find "/mnt/c/Users/send4/OneDrive/Escritorio/mproject" -type f -name "*.fa" -exec cp {} "/mnt/c/Users/send4/OneDrive/Escritorio/mproject/All MP fasta" \;
 
-## "BLASTX" using diamond
+# "BLASTX" using diamond
 
 -To download the virus database from UniprotKB
 
@@ -223,7 +230,7 @@ resulted in 45392 matches
 
 
 
-## BLASTN
+# BLASTN
 
 Downloading virus nucleotide database
 
