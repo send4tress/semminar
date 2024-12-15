@@ -1,12 +1,12 @@
- Git repository
+## Git repository
 
 [Daniel N. git](https://github.com/send4tress/semminar)
 
-Project proposal
+## Project proposal
 
 [Daniel Project proposal](https://github.com/send4tress/semminar/blob/main/Daniel%20Naranjo%20-%20Class%20Project%20Proposal.pdf)
 
-Genomic adventure
+## Genomic adventure
 
 Chapter 1 notes [Chapter 1](https://github.com/send4tress/semminar/blob/main/progress_logs/chapter1.md)
 
@@ -18,6 +18,6 @@ Chapter 4 notes [Chapter 4](https://github.com/send4tress/semminar/blob/main/pro
 
 Chapter 5 notes [Chapter 5](https://github.com/send4tress/semminar/blob/main/progress_logs/chapter5.md)
 
-Project final
+## Project final
 
 Markdown document [Project](https://github.com/send4tress/semminar/blob/main/progress_logs/Project.md)
