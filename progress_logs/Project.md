@@ -10,6 +10,8 @@
 
 ### Downloaded Reference Genome of the fungus (macrophomina phaseolina)
 
+Reference genome found in: https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_020875535.1/
+
 `wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/806/865/GCF_002806865.2_ASM280686v2/GCF_002806865.2_ASM280686v2_genomic.fna.gz
 
 `wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/806/865/GCF_002806865.2_ASM280686v2/GCF_002806865.2_ASM280686v2_genomic.gff.gz
