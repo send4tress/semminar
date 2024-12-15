@@ -281,6 +281,6 @@ Link to results [Results Diamond (blastx).xls](https://github.com/send4tress/sem
  
 # Conclusions
 
-- Successfully processed NGS data and performed a comparative analysis to both a nucleotide database (blastn) and a protein database (diamond).
+- Successfully processed NGS data and performed a comparative analysis to both a nucleotide database (blastn) and a protein database (diamond)
 - Viral sequences showing conserved regions like the coding sequence for the RdRp or the capsid proteins are present in the data, presumably this viruses are present in our fungal isolates
 - This pipeline is of great use and will be further polished for our regular use in the lab
