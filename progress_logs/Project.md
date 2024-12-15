@@ -1,13 +1,13 @@
 # Daniel Naranjo Project Script
 
 # Activating the environment / Frequently used commands
-`cd /home/biol726308/BIOL7263_Genomics/project/blast
+>`cd /home/biol726308/BIOL7263_Genomics/project/blast
 
-`mamba activate /home/mbtoomey/.conda/envs/BIOL7263_Genomics
+>`mamba activate /home/mbtoomey/.conda/envs/BIOL7263_Genomics
 
-`cd /scratch/biol726308/project
+>`cd /scratch/biol726308/project
 
-`squeue -u biol726308
+>`squeue -u biol726308
 
 # Setting up files 
 
@@ -15,12 +15,12 @@
 
 Reference genome found in: https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_020875535.1/
 
-`wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/020/875/535/GCA_020875535.1_ASM2087553v1/GCA_020875535.1_ASM2087553v1_genomic.fna.gz
+>`wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/020/875/535/GCA_020875535.1_ASM2087553v1/GCA_020875535.1_ASM2087553v1_genomic.fna.gz
 
-`wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/020/875/535/GCA_020875535.1_ASM2087553v1/GCA_020875535.1_ASM2087553v1_genomic.gbff.gz
+>`wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/020/875/535/GCA_020875535.1_ASM2087553v1/GCA_020875535.1_ASM2087553v1_genomic.gbff.gz
 
 - unzip files 
-`gunzip *.gz
+>`gunzip *.gz
 
 ### Project Raw Data
 
@@ -28,46 +28,46 @@ The fastq files generated from Illumina sequencing were not able to be found and
 
 ### Making simbolic links for the sequencing paired data 
 
-`ln -s AR009-B_S17_R1_001.fastq.gz read_1.fastq.gz   
-`ln -s AR009-B_S17_R2_001.fastq.gz read_2.fastq.gz
+>`ln -s AR009-B_S17_R1_001.fastq.gz read_1.fastq.gz   
+>`ln -s AR009-B_S17_R2_001.fastq.gz read_2.fastq.gz
 
 ### observing my gziped data
-`zcat read_2.fastq.gz | head
+>`zcat read_2.fastq.gz | head
 @LH00260:14:22CKNNLT3:3:1101:4181:1032 2:N:0:GATCAGATCT+AGATCTCGGT
 NCAACAGCAACAGCAACAGCAACATTTGGCGAAGCAAACATTGCAGCAAGCTCAGCTGCTCTTCCCTTACATGCAGGCTCAATTTCCCCATTCAACTAGCACTGCCACTGCTTCGCCTTCACATTCAAGAGATCGGAAGAGCGTCGTGTAG
 
 
 ### counting reads with zcat
 
-`zcat read_1.fastq.gz | grep @LH | wc -l
+>`zcat read_1.fastq.gz | grep @LH | wc -l
 
 11357466
 
-`zcat read_2.fastq.gz | grep @LH | wc -l
+>`zcat read_2.fastq.gz | grep @LH | wc -l
 
 11357466
 
 
 ##  Quality check with fastqc
-`mkdir -p /scratch/biol726308/project/fastqc_output
-`fastqc /scratch/biol726308/project/raw_data/read_1.fastq.gz -o /scratch/biol726308/project/fastqc_output/
-`fastqc /scratch/biol726308/project/raw_data/read_2.fastq.gz -o /scratch/biol726308/project/fastqc_output/
+>`mkdir -p /scratch/biol726308/project/fastqc_output
+>`fastqc /scratch/biol726308/project/raw_data/read_1.fastq.gz -o /scratch/biol726308/project/fastqc_output/
+>`fastqc /scratch/biol726308/project/raw_data/read_2.fastq.gz -o /scratch/biol726308/project/fastqc_output/
 
 
 
 ## Trimmed the fasqc files using trim galore
 - Trimmed the reads to a length of 100 to remove areas of low quality
 
-`trim_galore --paired --fastqc --gzip --cores 4 --length 100 /scratch/biol726308/project/raw_data/read_1.fastq.gz //scratch/biol726308/project/raw_data/read_2.fastq.gz --basename trimmed_reads -o /scratch/biol726308/project/trim
+>`trim_galore --paired --fastqc --gzip --cores 4 --length 100 /scratch/biol726308/project/raw_data/read_1.fastq.gz //scratch/biol726308/project/raw_data/read_2.fastq.gz --basename trimmed_reads -o /scratch/biol726308/project/trim
 
 
 ### Counting lines after trimming 
 
-`zcat trimmed_reads_val_1.fq.gz | wc -l
+>`zcat trimmed_reads_val_1.fq.gz | wc -l
 
 -42369340
 
-`zcat trimmed_reads_val_2.fq.gz | wc -l
+>`zcat trimmed_reads_val_2.fq.gz | wc -l
 
 -42369340
 
@@ -75,59 +75,59 @@ NCAACAGCAACAGCAACAGCAACATTTGGCGAAGCAAACATTGCAGCAAGCTCAGCTGCTCTTCCCTTACATGCAGGCTC
 
 ## Mapping to a reference genome (activating HISAT)
 - To activate the library this was used:
-`ml HISAT2/2.2.1-gompi-2022a
+>`ml HISAT2/2.2.1-gompi-2022a
 
 
-/scratch/biol726308/project/raw_data/mphaseolina
+>/scratch/biol726308/project/raw_data/mphaseolina
 
 ### make reference genome index
-`hisat2-build -p 4 GCF_002806865.2_ASM280686v2_genomic.fna mphaseolina_index
+>`hisat2-build -p 4 GCF_002806865.2_ASM280686v2_genomic.fna mphaseolina_index
 
 ## Extracting and sorting data of interest from the mapped file 
 
 ### Extract unaligned_reads from sam file
-`samtools view -f 12 -h aligned_reads.sam > unaligned_reads.sam
+>`samtools view -f 12 -h aligned_reads.sam > unaligned_reads.sam
 
 ### Converting sam to bam (binary) and sorting by name
 
-`samtools view -Sb /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads.sam > /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads.bam
+>`samtools view -Sb /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads.sam > /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads.bam
 `samtools sort -n /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads.bam -o /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_by_name.bam
 
 ### Correct mate information in paired-end reads using samtools fixmate 
 
-`samtools fixmate -m /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_by_name.bam /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_fixed.bam
+>`samtools fixmate -m /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_by_name.bam /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_fixed.bam
 
 ### Sorting again 
 
-`samtools sort /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_fixed.bam -o /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_fixed.bam
+>`samtools sort /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_fixed.bam -o /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_fixed.bam
 
 ### Marking duplicates and removed them
 
-`samtools markdup -r /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_fixed.bam /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam
+>`samtools markdup -r /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_fixed.bam /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam
 
 ### Making an index of the file 
 
-`samtools index /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam
+>`samtools index /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam
 
 ### Retrieving flagstats
 
-`samtools flagstat /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam
+>`samtools flagstat /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam
 
 
 ### Converting to fastq 
 
-`bedtools bamtofastq -i /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam -fq unmapped_r1.fastq -fq2 unmapped_r2.fastq
+>`bedtools bamtofastq -i /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam -fq unmapped_r1.fastq -fq2 unmapped_r2.fastq
 
 ### Quality check of the new file
 
-`fastqc /scratch/biol726308/project/raw_data/mphaseolina/unmapped_r1.fastq \
+>`fastqc /scratch/biol726308/project/raw_data/mphaseolina/unmapped_r1.fastq \
         /scratch/biol726308/project/raw_data/mphaseolina/unmapped_r2.fastq \
         -o /scratch/biol726308/project/raw_data/mphaseolina/fastqc_output
 # RNA-seq De-novo assembly
 
 - SPades program was used using the parameter -rna (paremeter -careful may also be used in the future)
 
-`spades.py --rna -1 /scratch/biol726308/project/raw_data/mphaseolina/unmapped_r1.fastq \
+>`spades.py --rna -1 /scratch/biol726308/project/raw_data/mphaseolina/unmapped_r1.fastq \
           -2 /scratch/biol726308/project/raw_data/mphaseolina/unmapped_r2.fastq \
           -t 8 -o /scratch/biol726308/project/assembly_output/
 
@@ -140,17 +140,17 @@ NCAACAGCAACAGCAACAGCAACATTTGGCGAAGCAAACATTGCAGCAAGCTCAGCTGCTCTTCCCTTACATGCAGGCTC
 
 
 ### Retrieving all the generated fasta files automatically
-`find "/mnt/c/Users/send4/OneDrive/Escritorio/mproject" -type f -name "*.fa" -exec cp {} "/mnt/c/Users/send4/OneDrive/Escritorio/mproject/All MP fasta" \;
+>`find "/mnt/c/Users/send4/OneDrive/Escritorio/mproject" -type f -name "*.fa" -exec cp {} "/mnt/c/Users/send4/OneDrive/Escritorio/mproject/All MP fasta" \;
 
 # "BLASTX" using diamond
 
 -To download the virus database from UniprotKB
 
-`wget "https://rest.uniprot.org/uniprotkb/stream?compressed=true&format=fasta&query=taxonomy_id:10239" -O uniprot_virus_database.fasta.gz
+>`wget "https://rest.uniprot.org/uniprotkb/stream?compressed=true&format=fasta&query=taxonomy_id:10239" -O uniprot_virus_database.fasta.gz
 
 Now we need to transform the file into a database using diamond
 
-`sbatch diamond_mkdb_virus.sbatch
+>`sbatch diamond_mkdb_virus.sbatch
 
 Now I ran diamond as blastx analysis 
 
@@ -160,12 +160,12 @@ I created the batch files for all my samples using the following logic
 `#!/bin/bash
 
 - Define directories
-`INPUT_DIR="/home/biol726308/BIOL7263_Genomics/project/all_fasta"
+>`INPUT_DIR="/home/biol726308/BIOL7263_Genomics/project/all_fasta"
 `OUTPUT_DIR="/home/biol726308/BIOL7263_Genomics/project/blast/results_protein"
 `DATABASE="virus_database.dmnd"
 
 - List sample files 
-`samples=(
+>`samples=(
 ` "MP117.fa" "MP115.fa" "MP95.fa" "MP108.fa" "MP98.fa" 
 `  "MP336.fa" "MP279.fa" "MP266.fa" "MP261.fa" "MP157.fa"
 `  "MP146.fa" "MP140.fa" "MP138.fa" "MP131.fa" "MP130.fa"
@@ -173,12 +173,12 @@ I created the batch files for all my samples using the following logic
 `)
 
 - Loop through each sample and create the corresponding .sh and .sbatch files
-`for sample in "${samples[@]}"; do
+>`for sample in "${samples[@]}"; do
 - Get the base name (without the .fa extension)
 `  base_name=$(basename ${sample} .fa)
   
 - Create .sh file (DIAMOND command)
-`  cat > ${base_name}.sh <<EOL
+>`  cat > ${base_name}.sh <<EOL
 
 - DIAMOND blastx command for sample ${base_name}
 >`diamond blastx \
@@ -279,3 +279,8 @@ Link to results [Results Diamond (blastx).xls](https://github.com/send4tress/sem
 
  Link to results [Results Blastn.xls](https://github.com/send4tress/semminar/blob/main/results/2024_all_mp_filtered_blast_results_formated.xlsx)
  
+# Conclusions
+
+- Successfully processed NGS data and performed a comparative analysis to both a nucleotide database (blastn) and a protein database (diamond).
+- Viral sequences showing conserved regions like the coding sequence for the RdRp or the capsid proteins are present in the data, presumably this viruses are present in our fungal isolates
+- This pipeline is of great use and will be further polished for our regular use in the lab
