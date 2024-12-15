@@ -1,188 +1,261 @@
+# Daniel Naranjo Project Script
 
-# Chapter5
+## Activating the environment / used commands
+`cd /home/biol726308/BIOL7263_Genomics/project/blast
+`mamba activate /home/mbtoomey/.conda/envs/BIOL7263_Genomics
+`cd /scratch/biol726308/project
+`squeue -u biol726308
 
-`mamba activate /home/mbtoomey/.conda/envs/BIOL7263_Genomics`
+## Setting up our files 
+
+### Downloaded Reference Genome of the fungus (macrophomina phaseolina)
+
+`wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/806/865/GCF_002806865.2_ASM280686v2/GCF_002806865.2_ASM280686v2_genomic.fna.gz
+
+`wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/806/865/GCF_002806865.2_ASM280686v2/GCF_002806865.2_ASM280686v2_genomic.gff.gz
+
+-unzip files 
+`gunzip *.gz
+
+### making simbolic links for the sequencing paired data 
+
+`ln -s AR009-B_S17_R1_001.fastq.gz read_1.fastq.gz   
+`ln -s AR009-B_S17_R2_001.fastq.gz read_2.fastq.gz
+
+### observing my gziped data
+zcat read_2.fastq.gz | head
+@LH00260:14:22CKNNLT3:3:1101:4181:1032 2:N:0:GATCAGATCT+AGATCTCGGT
+NCAACAGCAACAGCAACAGCAACATTTGGCGAAGCAAACATTGCAGCAAGCTCAGCTGCTCTTCCCTTACATGCAGGCTCAATTTCCCCATTCAACTAGCACTGCCACTGCTTCGCCTTCACATTCAAGAGATCGGAAGAGCGTCGTGTAG
 
 
-## Task1
+### counting reads with zcat
 
--read task 1
+`zcat read_1.fastq.gz | grep @LH | wc -l
+11357466
+`zcat read_2.fastq.gz | grep @LH | wc -l
+11357466
 
-## Task 2
 
--downloaded files
+##  Quality check with fastqc
+`mkdir -p /scratch/biol726308/project/fastqc_output
 
-`get the Illumina Data
-`wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR491/SRR491287/SRR491287_1.fastq.gz
-`wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR491/SRR491287/SRR491287_2.fastq.gz
+`fastqc /scratch/biol726308/project/raw_data/read_1.fastq.gz -o /scratch/biol726308/project/fastqc_output/
+`fastqc /scratch/biol726308/project/raw_data/read_2.fastq.gz -o /scratch/biol726308/project/fastqc_output/
 
-`get the PacBio data
-`wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR104/006/SRR1042836/SRR1042836_subreads.fastq.gz
 
--Ran fast qc 
 
-`sbatch /home/biol726308/BIOL7263_Genomics/scripts/pseudomonas/pseudo_fastqc.sbatch
+## Trimmed the fasqc files using trim galore
 
--fastqc results of the pacbio data show low quality statistics
+`trim_galore --paired --fastqc --gzip --cores 4 --length 100 /scratch/biol726308/project/raw_data/read_1.fastq.gz //scratch/biol726308/project/raw_data/read_2.fastq.gz --basename trimmed_reads -o /scratch/biol726308/project/trim
 
-## Task 3
 
--trim galore
-`sbatch /home/biol726308/BIOL7263_Genomics/scripts/pseudomonas/pseudo_trimm.sbatch
+cd /scratch/biol726308/project
 
-## Task 4
+### Counting lines after trimming 
 
-cd /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/
+`zcat trimmed_reads_val_1.fq.gz | wc -l
+42369340
+`zcat trimmed_reads_val_2.fq.gz | wc -l
+42369340
 
--assembly Illumina
-`sbatch /home/biol726308/BIOL7263_Genomics/scripts/pseudomonas/pseud_short_assembly.sbatch
 
--Quast
-`sbatch /home/biol726308/BIOL7263_Genomics/scripts/pseudomonas/pseud_quast.sbatch
+## Mapping to a reference genome (activating HISAT)
+`ml HISAT2/2.2.1-gompi-2022a
 
-cat /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/assembly/illumina_only/quast/report.txt
 
-my results:
+/scratch/biol726308/project/raw_data/mphaseolina
 
-```Assembly                    contigs
-# contigs (>= 0 bp)         527
-# contigs (>= 1000 bp)      120
-# contigs (>= 5000 bp)      102
-# contigs (>= 10000 bp)     91
-# contigs (>= 25000 bp)     73
-# contigs (>= 50000 bp)     50
-Total length (>= 0 bp)      6692025
-Total length (>= 1000 bp)   6619701
-Total length (>= 5000 bp)   6580295
-Total length (>= 10000 bp)  6494932
-Total length (>= 25000 bp)  6197435
-Total length (>= 50000 bp)  5381166
-# contigs                   129
-Largest contig              248605
-Total length                6626398
-GC (%)                      59.00
-N50                         93187
-N75                         64551
-L50                         22
-L75                         43
-```
-## Task 5
+### make reference genome index
+`hisat2-build -p 4 GCF_002806865.2_ASM280686v2_genomic.fna mphaseolina_index
 
-assembly of long reads
+## Extracting and sorting data of interest from the mapped file 
 
-`sbatch /home/biol726308/BIOL7263_Genomics/scripts/pseudomonas/pseud_long_assembly.sbatch
+### Extract unaligned_reads from sam file
+samtools view -f 12 -h aligned_reads.sam > unaligned_reads.sam
 
-Running quast.py
+### Converting sam to bam (binary) and sorting by name
 
-`quast.py --output-dir /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/assembly/hybrid/quast /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/assembly/hybrid/contigs.fasta
+samtools view -Sb /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads.sam > /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads.bam
+samtools sort -n /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads.bam -o /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_by_name.bam
 
-cat /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/assembly/illumina_only/quast/report.txt
-```
-Assembly                    contigs
-# contigs (>= 0 bp)         527
-# contigs (>= 1000 bp)      120
-# contigs (>= 5000 bp)      102
-# contigs (>= 10000 bp)     91
-# contigs (>= 25000 bp)     73
-# contigs (>= 50000 bp)     50
-Total length (>= 0 bp)      6692025
-Total length (>= 1000 bp)   6619701
-Total length (>= 5000 bp)   6580295
-Total length (>= 10000 bp)  6494932
-Total length (>= 25000 bp)  6197435
-Total length (>= 50000 bp)  5381166
-# contigs                   129
-Largest contig              248605
-Total length                6626398
-GC (%)                      59.00
-N50                         93187
-N75                         64551
-L50                         22
-L75                         43
-# N's per 100 kbp           0.00
-```
-cat /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/assembly/hybrid/quast/report.txt
+### Correct mate information in paired-end reads using samtools fixmate 
 
-```
-Assembly                    contigs
-# contigs (>= 0 bp)         300
-# contigs (>= 1000 bp)      32
-# contigs (>= 5000 bp)      30
-# contigs (>= 10000 bp)     28
-# contigs (>= 25000 bp)     25
-# contigs (>= 50000 bp)     20
-Total length (>= 0 bp)      6725842
-Total length (>= 1000 bp)   6677010
-Total length (>= 5000 bp)   6672688
-Total length (>= 10000 bp)  6656532
-Total length (>= 25000 bp)  6595226
-Total length (>= 50000 bp)  6437266
-# contigs                   34
-Largest contig              1292976
-Total length                6678398
-GC (%)                      58.98
-N50                         489830
-N75                         355188
-L50                         4
-L75                         8
-# N's per 100 kbp           0.00
-```
+samtools fixmate -m /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_by_name.bam /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_fixed.bam
 
-## Task 6 Align reads back to reference
+### Sorting again 
 
-mkdir /scratch/biol726308/BIOL7263_Genomics/pseudomonas_gm41/mapping_to_assembly/
+samtools sort /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_fixed.bam -o /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_fixed.bam
 
-Used BWA to make a reference index
-sbatch pseudomona_index.sbatch
--index was created
+### Marking duplicates and removed them
 
-Now for  mapping we will generate a sam file, convert it to bam, sort it by genomic coordinates , index it for rapid access ,and finally show statistics of the process done.
+samtools markdup -r /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_sorted_fixed.bam /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam
 
-pseudomonas_mapping.sbatch
+### Making an index of the file 
 
-results:
-```
-35309290 + 0 in total (QC-passed reads + QC-failed reads)
-0 + 0 secondary
-27786 + 0 supplementary
-0 + 0 duplicates
-34720534 + 0 mapped (98.33% : N/A)
-35281504 + 0 paired in sequencing
-17640752 + 0 read1
-17640752 + 0 read2
-34168130 + 0 properly paired (96.84% : N/A)
-34357360 + 0 with itself and mate mapped
-335388 + 0 singletons (0.95% : N/A)
-150192 + 0 with mate mapped to a different chr
-130325 + 0 with mate mapped to a different chr (mapQ>=5)
-```
+samtools index /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam
 
-Now mapping using minimap2
+### Retrieving flagstats
 
-pseudomonas_mapping_hybrid.sbatch
+samtools flagstat /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam
 
-Results
-```
-129847 + 0 in total (QC-passed reads + QC-failed reads)
-2764 + 0 secondary
-51985 + 0 supplementary
-0 + 0 duplicates
-105994 + 0 mapped (81.63% : N/A)
-0 + 0 paired in sequencing
-0 + 0 read1
-0 + 0 read2
-0 + 0 properly paired (N/A : N/A)
-0 + 0 with itself and mate mapped
-0 + 0 singletons (N/A : N/A)
-0 + 0 with mate mapped to a different chr
-0 + 0 with mate mapped to a different chr (mapQ>=5)
-```
 
-## Task 7 IGV Illumina vs PacBio
+### Converting to fastq 
 
-The pac bio reads show many more gaps than the Illumina reads, PacBio also displays a lot of insertions (in purple)
-The illumina results apparently have a better quality of data however in areas with low coverage or missing sequences the Pacbio data displays a better coverage of the whole sequence
+`bedtools bamtofastq -i /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam \
+    `-fq unmapped_r1.fastq \
+   ` -fq2 unmapped_r2.fastq
 
-## Task 8 
+`fastqc
+`fastqc /scratch/biol726308/project/raw_data/mphaseolina/unmapped_r1.fastq \
+        /scratch/biol726308/project/raw_data/mphaseolina/unmapped_r2.fastq \
+        -o /scratch/biol726308/project/raw_data/mphaseolina/fastqc_output
+## RNA-seq De-novo assembly
 
-no beer for me, many deadlines approach 
+
+`spades.py --rna -1 /scratch/biol726308/project/raw_data/mphaseolina/unmapped_r1.fastq \
+          -2 /scratch/biol726308/project/raw_data/mphaseolina/unmapped_r2.fastq \
+          -t 8 -o /scratch/biol726308/project/assembly_output/
+
+### Statistics on the assembly
+
+`quast.py -o /scratch/biol726308/project/quast_output/ \
+`>          -t 8 \
+`>          /scratch/biol726308/project/assembly_output/transcripts.fasta
+`/home/mbtoomey/.conda/envs/BIOL7263_Genomics/bin/quast.py -o /scratch/biol726308/project/quast_output/ -t 8 /scratch/biol726308/project/assembly_output/transcripts.fasta
+
+
+### Retrieving all the generated fasta files automatically
+`find "/mnt/c/Users/send4/OneDrive/Escritorio/mproject" -type f -name "*.fa" -exec cp {} "/mnt/c/Users/send4/OneDrive/Escritorio/mproject/All MP fasta" \;
+
+## "BLASTX" using diamond
+
+-To download the virus database from UniprotKB
+
+`wget "https://rest.uniprot.org/uniprotkb/stream?compressed=true&format=fasta&query=taxonomy_id:10239" -O uniprot_virus_database.fasta.gz
+
+Now we need to transform the file into a database using diamond
+
+`sbatch diamond_mkdb_virus.sbatch
+
+Now I ran diamond as blastx analysis 
+
+### Creating Batch files for diamond analysis
+I created the batch files for all my samples using:
+
+`#!/bin/bash
+
+`# Define directories
+`INPUT_DIR="/home/biol726308/BIOL7263_Genomics/project/all_fasta"
+`OUTPUT_DIR="/home/biol726308/BIOL7263_Genomics/project/blast/results_protein"
+`DATABASE="virus_database.dmnd"
+
+`# List of your sample files (you can also use find or ls to get the files)
+`samples=(
+` "MP117.fa" "MP115.fa" "MP95.fa" "MP108.fa" "MP98.fa" 
+`  "MP336.fa" "MP279.fa" "MP266.fa" "MP261.fa" "MP157.fa"
+`  "MP146.fa" "MP140.fa" "MP138.fa" "MP131.fa" "MP130.fa"
+`  "MP128.fa" "MP119.fa"
+`)
+
+`# Loop through each sample and create the corresponding .sh and .sbatch files
+`for sample in "${samples[@]}"; do
+`  # Get the base name (without the .fa extension)
+`  base_name=$(basename ${sample} .fa)
+  
+`  # Create .sh file (DIAMOND command)
+`  cat > ${base_name}.sh <<EOL
+
+`# DIAMOND blastx command for sample ${base_name}
+`diamond blastx \
+`  --threads 8 \
+`  --outfmt 6 qseqid sseqid length pident evalue stitle \
+`  -k 1 \
+`  -d ${DATABASE} \
+`  -q ${INPUT_DIR}/${sample} \
+`  -o ${OUTPUT_DIR}/${base_name}.tsv
+`EOL
+
+`  # Create .sbatch file (to submit the job to SLURM)
+`  cat > ${base_name}.sbatch <<EOL
+`#!/bin/bash
+`#SBATCH --partition=normal
+`#SBATCH --ntasks=1
+`#SBATCH --cpus-per-task=8
+`#SBATCH --mem=16G
+`#SBATCH --output=${base_name}_%j_stdout.txt
+`#SBATCH --error=${base_name}_%j_stderr.txt
+`#SBATCH --job-name=${base_name}
+
+`# Run the DIAMOND command for sample ${base_name}
+`bash ${base_name}.sh
+`EOL
+`done
+
+`echo "Generated .sh and .sbatch files for all samples."
+
+- Then I submited the work for each of my samples: sbatch MP117.sbatch, sbatch MP115.sbatch, etc
+
+
+### Combining diamond results 
+
+To work with only one file the following code was used to combine all the .tsv result files into one
+
+`for file in *.tsv; do
+`    if [[ "$file" != "combined_diamond_results.tsv" ]]; then
+`        sample_name=$(basename "$file" .tsv)
+`        awk -v sample="$sample_name" '{print sample "\t" $0}' "$file"
+`    fi
+`done > combined_diamond_results.tsv
+
+
+###filtering by lenght >100 , pident > 35% and removing sequences that have the word phage
+`awk -F'\t' '($4 >= 100 && $5 >= 35 && tolower($7) !~ /phage/)' combined_diamond_results.tsv > filtered_combined_diamond_results.tsv
+
+resulted in 45392 matches
+
+
+`echo -e "sample_name\tqseqid\tsseqid\tlength\tpident\tevalue\tstitle" > final_filtered_combined_diamond_results.tsv
+`cat filtered_combined_diamond_results.tsv >> final_filtered_combined_diamond_results.tsv
+
+
+
+
+
+## BLASTN
+
+Downloading virus nucleotide database
+
+`update_blastdb.pl --decompress nt_viruses
+
+`blastn -db /scratch/biol726308/project/virus_database -query /home/biol726308/BIOL7263_Genomics/project/all_fasta/MP108.fa -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads 20 -num_alignments 1 > /home/biol726308/BIOL7263_Genomics/project/blastn/results/MP108_blast.tsv
+
+Ran blastn for 108 
+`sbatch 108_blast.sbatch
+
+ran blast for the 17 isolates
+
+combined the tsv files into 1 
+
+filtered 
+
+`# Input file (your BLASTn results)
+`input_file="blastn_results_with_headers.tsv"
+`output_file="filtered_blast_results.tsv"
+
+`# Apply filters: E-value ≤ 1e-5, alignment length ≥ 200
+`awk -F'\t' '$8 <= 1e-5 && $12 >= 200' $input_file > $output_file
+
+After the filtering the file went from 3472 to 1505 matches
+
+### organizing the data 
+
+
+`# Add the description row with proper tab-separated values
+`echo -e "Isolate name\tQuery sequence ID\tSubject sequence ID\tSubject title\tSubject scientific name\tBit score\tQuery coverage\tE-value\tPercent identity\tSubject sequence length\tSubject accession\tAlignment length\tQuery sequence length\tQuery start position\tQuery end position\tSubject start position\tSubject end position\tStrand of alignment\tGap openings\tSubject taxonomy ID\tMismatched bases" > blastn_results_with_headers.tsv
+
+`# Append the original BLASTn results
+`cat your_blastn_results.tsv >> blastn_results_with_headers.tsv
+
+-filtered out the word "phage" since its not relevant for our results
+
+file went from  1505 to 1071
