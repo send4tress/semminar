@@ -56,7 +56,8 @@ NCAACAGCAACAGCAACAGCAACATTTGGCGAAGCAAACATTGCAGCAAGCTCAGCTGCTCTTCCCTTACATGCAGGCTC
 
 
 ## Trimmed the fasqc files using trim galore
-Trimeed the reads to a lenght of 100 to remove areas of low quality
+- Trimmed the reads to a length of 100 to remove areas of low quality
+
 `trim_galore --paired --fastqc --gzip --cores 4 --length 100 /scratch/biol726308/project/raw_data/read_1.fastq.gz //scratch/biol726308/project/raw_data/read_2.fastq.gz --basename trimmed_reads -o /scratch/biol726308/project/trim
 
 
@@ -73,7 +74,7 @@ Trimeed the reads to a lenght of 100 to remove areas of low quality
 
 
 ## Mapping to a reference genome (activating HISAT)
-To activate the library this was used:
+- To activate the library this was used:
 `ml HISAT2/2.2.1-gompi-2022a
 
 
@@ -115,9 +116,7 @@ To activate the library this was used:
 
 ### Converting to fastq 
 
-`bedtools bamtofastq -i /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam \
- `-fq unmapped_r1.fastq \
- `-fq2 unmapped_r2.fastq
+`bedtools bamtofastq -i /scratch/biol726308/project/raw_data/mphaseolina/unaligned_reads_no_duplicates.bam -fq unmapped_r1.fastq -fq2 unmapped_r2.fastq
 
 ### Quality check of the new file
 
@@ -126,7 +125,7 @@ To activate the library this was used:
         -o /scratch/biol726308/project/raw_data/mphaseolina/fastqc_output
 # RNA-seq De-novo assembly
 
-SPades program was used using the parameter -rna (paremeter -careful may also be used in the future)
+- SPades program was used using the parameter -rna (paremeter -careful may also be used in the future)
 
 `spades.py --rna -1 /scratch/biol726308/project/raw_data/mphaseolina/unmapped_r1.fastq \
           -2 /scratch/biol726308/project/raw_data/mphaseolina/unmapped_r2.fastq \
@@ -134,7 +133,7 @@ SPades program was used using the parameter -rna (paremeter -careful may also be
 
 ### Statistics on the assembly
 
-quast.py -o /scratch/biol726308/project/quast_output/ \
+>quast.py -o /scratch/biol726308/project/quast_output/ \
 >          -t 8 \
 >          /scratch/biol726308/project/assembly_output/transcripts.fasta
 /home/mbtoomey/.conda/envs/BIOL7263_Genomics/bin/quast.py -o /scratch/biol726308/project/quast_output/ -t 8 /scratch/biol726308/project/assembly_output/transcripts.fasta
