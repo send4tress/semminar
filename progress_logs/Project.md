@@ -181,17 +181,17 @@ I created the batch files for all my samples using the following logic
 `  cat > ${base_name}.sh <<EOL
 
 - DIAMOND blastx command for sample ${base_name}
-`diamond blastx \
+>`diamond blastx \
 `  --threads 8 \
 `  --outfmt 6 qseqid sseqid length pident evalue stitle \
 `  -k 1 \
 `  -d ${DATABASE} \
 `  -q ${INPUT_DIR}/${sample} \
 `  -o ${OUTPUT_DIR}/${base_name}.tsv
-`EOL
+>`EOL
 
 - Create .sbatch file (to submit the job to SLURM)
-`  cat > ${base_name}.sbatch <<EOL
+>`  cat > ${base_name}.sbatch <<EOL
 `#!/bin/bash
 `#SBATCH --partition=normal
 `#SBATCH --ntasks=1
@@ -199,14 +199,14 @@ I created the batch files for all my samples using the following logic
 `#SBATCH --mem=16G
 `#SBATCH --output=${base_name}_%j_stdout.txt
 `#SBATCH --error=${base_name}_%j_stderr.txt
-`#SBATCH --job-name=${base_name}
+>`#SBATCH --job-name=${base_name}
 
 - Run the DIAMOND command for sample ${base_name}
-`bash ${base_name}.sh
+>`bash ${base_name}.sh
 `EOL
-`done
+>`done
 
-`echo "Generated .sh and .sbatch files for all samples."
+>`echo "Generated .sh and .sbatch files for all samples."
 
 - Then I submited the work for each of my samples: sbatch MP117.sbatch, sbatch MP115.sbatch, etc
 
@@ -215,7 +215,7 @@ I created the batch files for all my samples using the following logic
 
 - To work with only one file the following code was used to combine all the .tsv result files into one
 
-for file in *.tsv; do
+>for file in *.tsv; do
     if [[ "$file" != "combined_diamond_results.tsv" ]]; then
         sample_name=$(basename "$file" .tsv)
         awk -v sample="$sample_name" '{print sample "\t" $0}' "$file"
@@ -224,12 +224,12 @@ done > combined_diamond_results.tsv
 
 
 ### filtering by lenght >100 , pident > 35% and removing sequences that have the word phage
-`awk -F'\t' '($4 >= 100 && $5 >= 35 && tolower($7) !~ /phage/)' combined_diamond_results.tsv > filtered_combined_diamond_results.tsv
+>`awk -F'\t' '($4 >= 100 && $5 >= 35 && tolower($7) !~ /phage/)' combined_diamond_results.tsv > filtered_combined_diamond_results.tsv
 
 - resulted in 45392 matches
 
 - Adding some column headers to my file
-`echo -e "sample_name\tqseqid\tsseqid\tlength\tpident\tevalue\tstitle" > final_filtered_combined_diamond_results.tsv
+>`echo -e "sample_name\tqseqid\tsseqid\tlength\tpident\tevalue\tstitle" > final_filtered_combined_diamond_results.tsv
 `cat filtered_combined_diamond_results.tsv >> final_filtered_combined_diamond_results.tsv
 
 - Finally formated the .tsv file oppening it in Excel the file to have a good looking interface color coded and with conditional formating
@@ -242,7 +242,7 @@ done > combined_diamond_results.tsv
 
 `update_blastdb.pl --decompress nt_viruses
 
-`blastn -db /scratch/biol726308/project/virus_database -query /home/biol726308/BIOL7263_Genomics/project/all_fasta/MP108.fa -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads 20 -num_alignments 1 > /home/biol726308/BIOL7263_Genomics/project/blastn/results/MP108_blast.tsv
+>`blastn -db /scratch/biol726308/project/virus_database -query /home/biol726308/BIOL7263_Genomics/project/all_fasta/MP108.fa -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads 20 -num_alignments 1 > /home/biol726308/BIOL7263_Genomics/project/blastn/results/MP108_blast.tsv
 
 - Ran blastn for sample 108 (test)
 `sbatch 108_blast.sbatch
@@ -254,11 +254,11 @@ done > combined_diamond_results.tsv
 - filtered using the following commands 
 
 - Input file (BLASTn results)
-`input_file="blastn_results_with_headers.tsv"
+>`input_file="blastn_results_with_headers.tsv"
 `output_file="filtered_blast_results.tsv"
 
 - Apply filters: E-value ≤ 1e-5, alignment length ≥ 200
-`awk -F'\t' '$8 <= 1e-5 && $12 >= 200' $input_file > $output_file
+>`awk -F'\t' '$8 <= 1e-5 && $12 >= 200' $input_file > $output_file
 
 - After the filtering the file went from 3472 to 1505 matches
 
@@ -266,13 +266,17 @@ done > combined_diamond_results.tsv
 
 
 - Added the description row with proper tab-separated values
-`echo -e "Isolate name\tQuery sequence ID\tSubject sequence ID\tSubject title\tSubject scientific name\tBit score\tQuery coverage\tE-value\tPercent identity\tSubject sequence length\tSubject accession\tAlignment length\tQuery sequence length\tQuery start position\tQuery end position\tSubject start position\tSubject end position\tStrand of alignment\tGap openings\tSubject taxonomy ID\tMismatched bases" > blastn_results_with_headers.tsv
+>`echo -e "Isolate name\tQuery sequence ID\tSubject sequence ID\tSubject title\tSubject scientific name\tBit score\tQuery coverage\tE-value\tPercent identity\tSubject sequence length\tSubject accession\tAlignment length\tQuery sequence length\tQuery start position\tQuery end position\tSubject start position\tSubject end position\tStrand of alignment\tGap openings\tSubject taxonomy ID\tMismatched bases" > blastn_results_with_headers.tsv
 
 - Append the original BLASTn results
-`cat your_blastn_results.tsv >> blastn_results_with_headers.tsv
+>`cat your_blastn_results.tsv >> blastn_results_with_headers.tsv
 
 - filtered out the word "phage" since its not relevant for our results
 
 - file went from  1505 to 1071
 
 - formated in excel the file to have a good looking interface color coded and with conditional formating
+
+[Results Blastn](https://github.com/send4tress/semminar/blob/main//results/2024 all_mp_filtered_blast_results_formated.xlsx)
+[Results Diamond (blastx)](https://github.com/send4tress/semminar/blob/main/results/2024 all_mp_filtered_diamond_results_formated.xlsx)
+ 
