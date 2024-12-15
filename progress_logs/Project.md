@@ -12,9 +12,9 @@
 
 Reference genome found in: https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_020875535.1/
 
-`wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/806/865/GCF_002806865.2_ASM280686v2/GCF_002806865.2_ASM280686v2_genomic.fna.gz
+`wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/020/875/535/GCA_020875535.1_ASM2087553v1/GCA_020875535.1_ASM2087553v1_genomic.fna.gz
 
-`wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/806/865/GCF_002806865.2_ASM280686v2/GCF_002806865.2_ASM280686v2_genomic.gff.gz
+`wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/020/875/535/GCA_020875535.1_ASM2087553v1/GCA_020875535.1_ASM2087553v1_genomic.gbff.gz
 
 -unzip files 
 `gunzip *.gz
@@ -207,22 +207,22 @@ I created the batch files for all my samples using the following logic
 
 ### Combining diamond results 
 
--- To work with only one file the following code was used to combine all the .tsv result files into one
+- To work with only one file the following code was used to combine all the .tsv result files into one
 
-`for file in *.tsv; do
-`    if [[ "$file" != "combined_diamond_results.tsv" ]]; then
-`        sample_name=$(basename "$file" .tsv)
-`        awk -v sample="$sample_name" '{print sample "\t" $0}' "$file"
-`    fi
-`done > combined_diamond_results.tsv
+for file in *.tsv; do
+    if [[ "$file" != "combined_diamond_results.tsv" ]]; then
+        sample_name=$(basename "$file" .tsv)
+        awk -v sample="$sample_name" '{print sample "\t" $0}' "$file"
+    fi
+done > combined_diamond_results.tsv
 
 
-###filtering by lenght >100 , pident > 35% and removing sequences that have the word phage
+### filtering by lenght >100 , pident > 35% and removing sequences that have the word phage
 `awk -F'\t' '($4 >= 100 && $5 >= 35 && tolower($7) !~ /phage/)' combined_diamond_results.tsv > filtered_combined_diamond_results.tsv
 
 - resulted in 45392 matches
 
-
+- Adding some column headers to my file
 `echo -e "sample_name\tqseqid\tsseqid\tlength\tpident\tevalue\tstitle" > final_filtered_combined_diamond_results.tsv
 `cat filtered_combined_diamond_results.tsv >> final_filtered_combined_diamond_results.tsv
 
@@ -232,7 +232,7 @@ I created the batch files for all my samples using the following logic
 
 # BLASTN
 
-Downloading virus nucleotide database
+- Downloading virus nucleotide database
 
 `update_blastdb.pl --decompress nt_viruses
 
