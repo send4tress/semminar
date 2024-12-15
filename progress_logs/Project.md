@@ -1,12 +1,15 @@
 # Daniel Naranjo Project Script
 
-# Activating the environment / used commands
+# Activating the environment / Frequently used commands
 `cd /home/biol726308/BIOL7263_Genomics/project/blast
+
 `mamba activate /home/mbtoomey/.conda/envs/BIOL7263_Genomics
+
 `cd /scratch/biol726308/project
+
 `squeue -u biol726308
 
-# Setting up our files 
+# Setting up files 
 
 ### Downloaded Reference Genome of the fungus (macrophomina phaseolina)
 
@@ -16,10 +19,14 @@ Reference genome found in: https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_0208
 
 `wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/020/875/535/GCA_020875535.1_ASM2087553v1/GCA_020875535.1_ASM2087553v1_genomic.gbff.gz
 
--unzip files 
+- unzip files 
 `gunzip *.gz
 
-### making simbolic links for the sequencing paired data 
+### Project Raw Data
+
+The fastq files generated from Illumina sequencing were not able to be found and are presumed to be lost, however the fasta files derived from each sample were used in this project (for the diamond blast analysis). For the next steps which involve processing fasq files, trimming, quality check and assembly, two fastq files (paired data) were used and the commands listed here could be used to processs further sequencing rounds (planed for Jan 2025) 
+
+### Making simbolic links for the sequencing paired data 
 
 `ln -s AR009-B_S17_R1_001.fastq.gz read_1.fastq.gz   
 `ln -s AR009-B_S17_R2_001.fastq.gz read_2.fastq.gz

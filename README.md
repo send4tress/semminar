@@ -20,4 +20,4 @@ Chapter 5 notes [Chapter 5](https://github.com/send4tress/semminar/blob/main/pro
 
 ## Project final
 
-Markdown document [Project](https://github.com/send4tress/semminar/blob/main/progress_logs/Project.md)
+[Markdown document](https://github.com/send4tress/semminar/blob/main/progress_logs/Project.md)
