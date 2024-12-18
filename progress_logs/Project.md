@@ -1,5 +1,18 @@
 # Daniel Naranjo Project Script
 
+
+# Background
+
+- The fungal plant pathogen Macrophomina phaseolina causes diseases that impact the economic yield of soybean production. Finding biological methods of control could help mitigate the severity of the disease, for this reason, the exploration of the viral population found infecting the fungus could help researchers understand the virus-fungus interactions and possibly find mycoviruses exerting suppressing effects in the severity of the fungus.
+- The objective of this project was to screen M. phaseolina RNA-seq data in order to find mycoviral signatures by using bioinformatic tools
+- FASTQ files were processed and short reads were assembled into contigs, then two different alignment processes were used to compare the sequences against a protein database and a nucleotide database, contigs showing acceptable similarities to mycoviruses led to the conclusion that the original sample contains a mycovirus (mycovirus positive)
+
+# Data sources
+
+- The data was generated using the Illumina platform, samples were processed in Dr. Ali's lab and sent to a service provider (OSU)
+- A total of 17 samples were used in this project from the fungal isolates: MP95, MP,98, MP108, MP115, MP117, MP119, MP128, MP130, MP131, MP138, MP140, MP146, MP157, MP261, MP266, MP279, MP336
+
+
 # Activating the environment / Frequently used commands
 >`cd /home/biol726308/BIOL7263_Genomics/project/blast
 
@@ -275,9 +288,33 @@ Link to results [Results Diamond (blastx).xls](https://github.com/send4tress/sem
 
 - file went from  1505 to 1071
 
-- formated in excel the file to have a good looking interface color coded and with conditional formating
+- formatted in excel the file to have a good looking interface color coded and with conditional formatting
 
  Link to results [Results Blastn.xls](https://github.com/send4tress/semminar/blob/main/results/2024_all_mp_filtered_blast_results_formated.xlsx)
+ 
+# Results 
+ 
+ Both analysis (diamond/blastx, blastn) generated hundreds of viral matches for each isolate.
+ Manually inspecting the files, the most relevant matches were selected and are listed below:
+ 
+ - **Macrophomina phaseolina hypovirus 2**  
+- **Macrophomina phaseolina tobamo-like virus**  
+- **Macrophomina phaseolina mycobunyavirus 1**  
+- **Macrophomina phaseolina umbra-like virus 1**  
+- **Macrophomina phaseolina fusagravirus 5**  
+- **Macrophomina phaseolina single-stranded RNA virus 1**  
+- **Rhizoctonia solani mitovirus 10**  
+- **Macrophomina phaseolina victorivirus 1**  
+- **Macrophomina phaseolina ourmia-like virus 3**  
+- **Macrophomina phaseolina mitovirus 4**  
+- **Macrophomina phaseolina endornavirus 1**  
+- **MAG: Riboviria sp.** H1_Rhizo_25_scaffold_783 RNA-dependent RNA polymerase (H1Rhizo25783_000001)
+- **Macrophomina phaseolina double-stranded RNA virus 2**  
+- **Macrophomina phaseolina poty-like virus**  
+- **Diplodia seriata narnavirus 1**  
+- **MAG: Riboviria sp.** H3_Bulk_42_scaffold_3696 RNA-dependent RNA polymerase (H3Bulk423696_000001)
+ 
+ 
  
 # Conclusions
 
