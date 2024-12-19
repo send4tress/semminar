@@ -296,9 +296,10 @@ Link to results [Results Diamond (blastx).xls](https://github.com/send4tress/sem
  
  Both analysis (diamond/blastx, blastn) generated hundreds of viral matches for each isolate.
  
- It was observed that a single isolate was infected with more than one mycovirus and that the same mycovirus could be found across many isolates
- Manually inspecting the files, the most relevant matches were selected and are listed below.
- It was noted that some of the alignment scores for both nucleotide and protein analysis showed fair similarity (~50%  for protein and ~70% for nucleotide) in some matches
+ It was observed that a single isolate was infected with more than one mycovirus (outstanding example seen in **MP146**) and that the same mycovirus could be found across many isolates
+ Manually inspecting the files, the most relevant matches were selected and are listed below
+ In the excel file, contigs matching to the same mycovirus were color coded,which helped to better understand the viral population inside each isolate, this can be visualized here [Color coded results](https://github.com/send4tress/semminar/blob/main/results/2024_project_results_colorcoded.xlsx)
+ It was noted that some of the alignment scores for both nucleotide and protein analysis showed fair similarity (~50%  for protein and ~70% for nucleotide) in some matches, this might represent novel viruses
  
  - **Macrophomina phaseolina hypovirus 2**  
 - **Macrophomina phaseolina tobamo-like virus**  
@@ -311,7 +312,7 @@ Link to results [Results Diamond (blastx).xls](https://github.com/send4tress/sem
 - **Macrophomina phaseolina ourmia-like virus 3**  
 - **Macrophomina phaseolina mitovirus 4**  
 - **Macrophomina phaseolina endornavirus 1**  
-- **MAG: Riboviria sp.** H1_Rhizo_25_scaffold_783 RNA-dependent RNA polymerase (H1Rhizo25783_000001)
+- **MAG: Riboviria sp.** H1_Rhizo_25_scaffold_783 RNA-dependent RNA polymerase (H1Rhizo25783_000001) 
 - **Macrophomina phaseolina double-stranded RNA virus 2**  
 - **Macrophomina phaseolina poty-like virus**  
 - **Diplodia seriata narnavirus 1**  
@@ -324,3 +325,4 @@ Link to results [Results Diamond (blastx).xls](https://github.com/send4tress/sem
 - Successfully processed NGS data and performed a comparative analysis to both a nucleotide database (blastn) and a protein database (diamond)
 - Viral sequences showing conserved regions like the coding sequence for the RdRp or the capsid proteins are present in the data, presumably this viruses are present in our fungal isolates
 - This pipeline is of great use and will be further polished for our regular use in the lab
+- It is recommended to change the threshold for the blastn search to be below 70% (P.ident) to allow for more divergent sequences to be included in our analysts, also to only display 1 result per search to avoid generating too much data
