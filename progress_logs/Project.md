@@ -296,12 +296,15 @@ Link to results [Results Diamond (blastx).xls](https://github.com/send4tress/sem
  
  Both analysis (diamond/blastx, blastn) generated hundreds of viral matches for each isolate.
  
- It was observed that a single isolate was infected with more than one mycovirus (outstanding example seen in **MP146**) and that the same mycovirus could be found across many isolates
- Manually inspecting the files, the most relevant matches were selected and are listed below
- In the excel file, contigs matching to the same mycovirus were color coded,which helped to better understand the viral population inside each isolate, this can be visualized here [Color coded results](https://github.com/send4tress/semminar/blob/main/results/2024_project_results_colorcoded.xlsx)
- It was noted that some of the alignment scores for both nucleotide and protein analysis showed fair similarity (~50%  for protein and ~70% for nucleotide) in some matches, this might represent novel viruses
+ It was observed that a single isolate was infected with more than one mycovirus (outstanding example seen in **MP146**) and that the same mycovirus could be found across many isolates.
  
- - **Macrophomina phaseolina hypovirus 2**  
+ Manually inspecting the files, the most relevant matches were selected and are listed below.
+ 
+ In the excel file, contigs matching to the same mycovirus were color coded,which helped to better understand the viral population inside each isolate, this can be visualized here [Color coded results](https://github.com/send4tress/semminar/blob/main/results/2024_project_results_colorcoded.xlsx).
+ 
+ It was noted that some of the alignment scores for both nucleotide and protein analysis showed fair similarity (~50%  for protein and ~70% for nucleotide) in some matches, this might represent novel viruses and require further processing.
+ 
+- **Macrophomina phaseolina hypovirus 2**  
 - **Macrophomina phaseolina tobamo-like virus**  
 - **Macrophomina phaseolina mycobunyavirus 1**  
 - **Macrophomina phaseolina umbra-like virus 1**  
