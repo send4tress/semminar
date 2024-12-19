@@ -295,7 +295,10 @@ Link to results [Results Diamond (blastx).xls](https://github.com/send4tress/sem
 # Results 
  
  Both analysis (diamond/blastx, blastn) generated hundreds of viral matches for each isolate.
- Manually inspecting the files, the most relevant matches were selected and are listed below:
+ 
+ It was observed that a single isolate was infected with more than one mycovirus and that the same mycovirus could be found across many isolates
+ Manually inspecting the files, the most relevant matches were selected and are listed below.
+ It was noted that some of the alignment scores for both nucleotide and protein analysis showed fair similarity (~50%  for protein and ~70% for nucleotide) in some matches
  
  - **Macrophomina phaseolina hypovirus 2**  
 - **Macrophomina phaseolina tobamo-like virus**  
